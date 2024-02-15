@@ -6,18 +6,18 @@ from email.mime.text import MIMEText
 import openai
 from dotenv import load_dotenv
 
+# Read .env file
+load_dotenv()
+
 # IMAP server login credentials
-IMAP_SERVER = os.environ['IMAP_SERVER']
-USERNAME = os.environ['USERNAME']
-PASSWORD = os.environ['PASSWORD']
+IMAP_SERVER = os.getenv('IMAP_SERVER')
+USERNAME = os.getenv('USER_NAME')
+PASSWORD = os.getenv('PASSWORD')
 # SMTP server settings
-SMTP_SERVER = os.environ['SMTP_SERVER']
+SMTP_SERVER = os.getenv('SMTP_SERVER')
 SMTP_PORT = 587
 
 def fetch_new_mail():
-    # Read .env file
-    load_dotenv()
-
     # Connect to the IMAP server
     mail = imaplib.IMAP4_SSL(IMAP_SERVER)
     mail.login(USERNAME, PASSWORD)
@@ -32,10 +32,10 @@ def fetch_new_mail():
     email_ids = data[0].split()
 
     # Setup OpenAI
-    openai.api_key = os.environ['OPENAI_KEY']
+    openai.api_key = os.getenv('OPENAI_KEY')
     prompt = [{
         "role": "system",
-        "content": os.environ['SYSTEM_PROMPT']
+        "content": os.getenv('SYSTEM_PROMPT')
     }]
 
     # Loop through each email ID and fetch the corresponding email
@@ -49,12 +49,6 @@ def fetch_new_mail():
         # Extract relevant information from the email
         subject = msg['Subject']
         sender = msg['From']
-        date = msg['Date']
-
-        # Print the email details
-        print('Subject:', subject)
-        print('From:', sender)
-        print('Date:', date)
 
         # Iterate through the email parts to extract the content
         for part in msg.walk():
@@ -72,7 +66,7 @@ def fetch_new_mail():
                     .encode('utf-8')\
                     .decode('utf-8')
 
-                send(os.environ['USERNAME'], sender, 'Reply to '+subject, reply)
+                send(USERNAME, sender, 'Reply to '+subject, reply)
 
     # Close the connection to the IMAP server
     mail.logout()
@@ -80,7 +74,7 @@ def fetch_new_mail():
 
 def send(sender, recipient, subject, message):
     # Create the email message
-    msg = MIMEText(message)
+    msg = MIMEText('Hi,\n\n' + message + '\n\nBest,\nIngenius.')
     msg['Subject'] = subject
     msg['From'] = sender
     msg['To'] = recipient
@@ -94,6 +88,8 @@ def send(sender, recipient, subject, message):
 
     # Send the email
     smtp_conn.sendmail(sender, recipient, msg.as_string())
+
+    print('Reply sent.')
 
     # Close the connection to the SMTP server
     smtp_conn.quit()
