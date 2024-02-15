@@ -61,7 +61,7 @@ PASSWORD="xxxxxx"
 
 #### Demo
 
-Click to send email to [door@ingenhub.com](mailto:door@ingenhub.com?subject=Asking%20common%20question&body=Hi%2C%0AWhat%27s%20the%20math%20equations%20to%20prove%20wormhole%3F%0A%0AThanks!)
+Click to send email to [door@ingenhub.com](mailto:door@ingenhub.com?subject=Asking%20common%20question&body=Hi%2C%0A%0AWhat%27s%20the%20math%20equations%20to%20prove%20wormhole%3F%0A%0AThanks!)
 
 ## License
 MIT license. For more information, see the [LICENSE](LICENSE) file included in the repository.
