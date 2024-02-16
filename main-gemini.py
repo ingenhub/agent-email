@@ -3,7 +3,6 @@ import imaplib
 import email
 import smtplib
 from email.mime.text import MIMEText
-import openai
 import google.generativeai as genai
 from dotenv import load_dotenv
 
@@ -32,12 +31,9 @@ def fetch_new_mail():
     # Get the list of email IDs
     email_ids = data[0].split()
 
-    # Setup OpenAI
-    openai.api_key = os.getenv('OPENAI_KEY')
-    prompt = [{
-        "role": "system",
-        "content": os.getenv('SYSTEM_PROMPT'),
-    }]
+    # Setup Gemini AI
+    genai.configure(api_key = os.getenv('GEMINIAI_KEY'))
+    model = genai.GenerativeModel('gemini-pro')
 
     # Loop through each email ID and fetch the corresponding email
     for email_id in email_ids:
@@ -54,18 +50,8 @@ def fetch_new_mail():
         # Iterate through the email parts to extract the content
         for part in msg.walk():
             if part.get_content_type() == 'text/plain':
-                prompt.append({"role": "user", "content": part.get_payload(decode=True).decode('utf-8')})
-
-                response = openai.chat.completions.create(
-                    model='gpt-3.5-turbo',
-                    messages=prompt,
-                    temperature=0.7,
-                ) 
-
-                reply = response.choices[0].message.content\
-                    .strip()\
-                    .encode('utf-8')\
-                    .decode('utf-8')
+                response = model.generate_content(part.get_payload(decode=True).decode('utf-8'))
+                reply = response.text
 
                 send(USERNAME, sender, 'Re: '+subject, reply)
 

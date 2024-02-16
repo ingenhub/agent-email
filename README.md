@@ -20,7 +20,7 @@ Currently, AI tools are usually constrained to a chat window or are limited in t
 
 #### Requirements
 
-Python >=3.10 supported. Older versions of Python are on a best-effort basis. 
+Python >=3.10 supported. 
 
 To check what's the installed version :
 ```bash 
@@ -40,13 +40,14 @@ python3 -m venv .venv
 
 . .venv/bin/activate
 
-pip install openai
+pip install openai google-generativeai
 ```
 
 #### Environment file [.env](.example.env)
 
 ```bash
 OPENAI_KEY="sk-xxx"
+GEMINIAI_KEY="sk-xxx"
 SYSTEM_PROMPT="You are a helpful assistant.."
 IMAP_SERVER="imap.xx.xxxx.xxx"
 SMTP_SERVER="smtp.xx.xxxx.xxx"
@@ -57,9 +58,9 @@ PASSWORD="xxxxxx"
 #### How it Work
 1. Write an email to agent's email address (same as IMAP username)
 
-2. Run the script ``` python3 main.py ```
+2. Run the script ``` python3 main.py ``` or ``` python3 main-gemini.py ``` (using Gemini AI)
 
-#### Demo
+#### Demo (using Gemini AI)
 
 Click to send email to [door@ingenhub.com](mailto:door@ingenhub.com?subject=Asking%20common%20question.&body=Hi%2C%0A%0AWhat%27s%20the%20math%20equation%20to%20prove%20a%20wormhole%3F%0A%0AThanks!)
 
